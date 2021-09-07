@@ -1,14 +1,29 @@
 CC=clang
-CFLAGS=-Wall -c
+CFLAGS=-Wall -c -Werror
 DEBUGFLAGS=-g -O0
-RELEASEFLAGS=-O3
 
+
+all: disassembler cpu ram rom display
+
+emulator: cpu ram rom display
 
 disassembler: disassembler.o
-	$(CC) disassembler.o -o disassembler
-
-disassembler.o: src/Disassembler/disassembler.c
-	$(CC) $(CFLAGS) $(DEBUGFLAGS) src/Disassembler/disassembler.c
+	$(CC) obj/disassembler.o -o bin/disassembler
 
 cpu:
 
+
+ram:
+
+
+rom:
+
+
+display:
+
+
+disassembler.o: src/Disassembler/disassembler.c
+	$(CC) $(CFLAGS) $(DEBUGFLAGS) src/Disassembler/disassembler.c -o obj/disassembler.o
+
+clean:
+	rm -rf bin/* obj/*

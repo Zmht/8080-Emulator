@@ -42,7 +42,7 @@ int Disassemble8080(unsigned char *codebuffer, int pc)
         printf("DCR     B");
         break;
     case 0x06:
-        printf("MVI     B,#$%02x", code[2]);
+        printf("MVI     B,#$%02x", code[1]);
         break;
     case 0x07:
         printf("RLC");
@@ -57,121 +57,129 @@ int Disassemble8080(unsigned char *codebuffer, int pc)
         printf("LDAX");                             /* Load Accumulator */
         break;
     case 0x0b:
-     	printf("DCX B	1		BC = BC-1");
+     	printf("DCX     B");
         break;
     case 0x0c:
-     	printf("INR C	1	Z, S, P, AC	C <- C+1");
+     	printf("INR     C");
         break;
     case 0x0d:
-     	printf("DCR C	1	Z, S, P, AC	C <-C-1");
+     	printf("DCR     C");
         break;
     case 0x0e:
-     	printf("MVI C,D8	2		C <- byte 2");
+     	printf("MVI     C,#$%02x", code[1]);
+        opbytes = 2;
         break;
     case 0x0f:
-     	printf("RRC	1	CY	A = A >> 1; bit 7 = prev bit 0; CY = prev bit 0");
+     	printf("RRC");
         break;
     case 0x10:
-     	printf("-			");
+     	printf("NOP");
         break;
     case 0x11:
-     	printf("LXI D,D16	3		D <- byte 3, E <- byte 2");
+     	printf("LXI     D,#$%02x%02x",code[2], code[1]);
+        opbytes = 3;
         break;
     case 0x12:
-     	printf("STAX D	1		(DE) <- A");
+     	printf("STAX    D");
         break;
     case 0x13:
-     	printf("INX D	1		DE <- DE + 1");
+     	printf("INX     D");
         break;
     case 0x14:
-     	printf("INR D	1	Z, S, P, AC	D <- D+1");
+     	printf("INR     D");
         break;
     case 0x15:
-     	printf("DCR D	1	Z, S, P, AC	D <- D-1");
+     	printf("DCR     D");
         break;
     case 0x16:
-     	printf("MVI D, D8	2		D <- byte 2");
+     	printf("MVI     D,#$%02x", code[1]);
+        opbytes = 2;
         break;
     case 0x17:
-     	printf("RAL	1	CY	A = A << 1; bit 0 = prev CY; CY = prev bit 7");
+     	printf("RAL	    1");
         break;
     case 0x18:
-     	printf("-			");
+     	printf("NOP");
         break;
     case 0x19:
-     	printf("DAD D	1	CY	HL = HL + DE");
+     	printf("DAD     D");
         break;
     case 0x1a:
-     	printf("LDAX D	1		A <- (DE)");
+     	printf("LDAX    D");
         break;
     case 0x1b:
-     	printf("DCX D	1		DE = DE-1");
+     	printf("DCX     D");
         break;
     case 0x1c:
-     	printf("INR E	1	Z, S, P, AC	E <-E+1");
+     	printf("INR     E");
         break;
     case 0x1d:
-     	printf("DCR E	1	Z, S, P, AC	E <- E-1");
+     	printf("DCR     E");
         break;
     case 0x1e:
-     	printf("MVI E,D8	2		E <- byte 2");
+     	printf("MVI     E,#$%02x", code[1]);
+        opbytes = 2;
         break;
     case 0x1f:
-     	printf("RAR	1	CY	A = A >> 1; bit 7 = prev bit 7; CY = prev bit 0");
+     	printf("RAR");
         break;
     case 0x20:
-     	printf("RIM	1		special");
+     	printf("RIM");
         break;
     case 0x21:
-     	printf("LXI H,D16	3		H <- byte 3, L <- byte 2");
+     	printf("LXI     H,#$%02x%02x", code[2], code[1]);
+        opbytes = 3;
         break;
     case 0x22:
-     	printf("SHLD adr	3		(adr) <-L; (adr+1)<-H");
+     	printf("SHLD    $%02x%02x", code[2], code[1]);
+        opbytes = 3;
         break;
     case 0x23:
-     	printf("INX H	1		HL <- HL + 1");
+     	printf("INX     H");
         break;
     case 0x24:
-     	printf("INR H	1	Z, S, P, AC	H <- H+1");
+     	printf("INR     H");
         break;
     case 0x25:
-     	printf("DCR H	1	Z, S, P, AC	H <- H-1");
+     	printf("DCR     H");
         break;
     case 0x26:
-     	printf("MVI H,D8	2		L <- byte 2");
+     	printf("MVI     H,#$%02x", code[1]);
         break;
     case 0x27:
-     	printf("DAA	1		special");
+     	printf("DAA");
         break;
     case 0x28:
-     	printf("-			");
+     	printf("NOP");
         break;
     case 0x29:
-     	printf("DAD H	1	CY	HL = HL + HI");
+     	printf("DAD     H");
         break;
     case 0x2a:
-     	printf("LHLD adr	3		L <- (adr); H<-(adr+1)");
+     	printf("LHLD    #$%02x%02x", code[2], code[1]);
+        opbytes = 3;
         break;
     case 0x2b:
-     	printf("DCX H	1		HL = HL-1");
+     	printf("DCX     H");
         break;
     case 0x2c:
-     	printf("INR L	1	Z, S, P, AC	L <- L+1");
+     	printf("INR     L");
         break;
     case 0x2d:
-     	printf("DCR L	1	Z, S, P, AC	L <- L-1");
+     	printf("DCR     L");
         break;
     case 0x2e:
-     	printf("MVI L, D8	2		L <- byte 2");
+     	printf("MVI     L, #$%02x", code[1]);
+        opbytes = 2;
         break;
     case 0x2f:
-     	printf("CMA	1		A <- !A");
+     	printf("CMA");
         break;
     case 0x30:
-     	printf("SIM	1		special");
+     	printf("SIM");
         break;
     case 0x31:
-     	printf("LXI SP, D16	3		SP.hi <- byte 3, SP.lo <- byte 2");
+     	printf("LXI     SP, D16	3");
         break;
     case 0x32:
      	printf("STA adr	3		(adr) <- A");
@@ -792,4 +800,5 @@ int Disassemble8080(unsigned char *codebuffer, int pc)
      	printf("RST 7	1		CALL $38");
         break;
     }
+    return 0;
 }
