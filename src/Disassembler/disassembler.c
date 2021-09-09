@@ -179,13 +179,15 @@ int Disassemble8080(unsigned char *codebuffer, int pc)
      	printf("SIM");
         break;
     case 0x31:
-     	printf("LXI     SP, D16	3");
+     	printf("LXI     SP, #$%02x%02x", code[2], code[1]);
+        opbytes = 3;
         break;
     case 0x32:
-     	printf("STA adr	3		(adr) <- A");
+     	printf("STA     #$%02x%02x", code[2], code[1]);
+        opbytes = 3;
         break;
     case 0x33:
-     	printf("INX SP	1		SP = SP + 1");
+     	printf("INX     SP");
         break;
     case 0x34:
      	printf("INR     M");
@@ -204,13 +206,14 @@ int Disassemble8080(unsigned char *codebuffer, int pc)
      	printf("NOP");
         break;
     case 0x39:
-     	printf("DAD SP	1	CY	HL = HL + SP");
+     	printf("DAD     SP");
         break;
     case 0x3a:
-     	printf("LDA adr	3		A <- (adr)");
+     	printf("LDA     #$%02x%02x", code[2], code[1]);
+        opbytes = 3;
         break;
     case 0x3b:
-     	printf("DCX SP	1		SP = SP-1");
+     	printf("DCX     SP");
         break;
     case 0x3c:
      	printf("INR     A");
@@ -719,103 +722,115 @@ int Disassemble8080(unsigned char *codebuffer, int pc)
         opbytes = 2;
         break;
     case 0xdf:
-     	printf("RST 3	1		CALL $18");
+     	printf("RST     3");
         break;
     case 0xe0:
-     	printf("RPO	1		if PO, RET");
+     	printf("RPO");
         break;
     case 0xe1:
-     	printf("POP H	1		L <- (sp); H <- (sp+1); sp <- sp+2");
+     	printf("POP     H");
         break;
     case 0xe2:
-     	printf("JPO adr	3		if PO, PC <- adr");
+     	printf("JPO     #$%02x%02x", code[2], code[1]);
+        opbytes = 3;
         break;
     case 0xe3:
-     	printf("XTHL	1		L <-> (SP); H <-> (SP+1)");
+     	printf("XTHL");
         break;
     case 0xe4:
-     	printf("CPO adr	3		if PO, CALL adr");
+     	printf("CPO     #$%02x%02x", code[2], code[1]);
+        opbytes = 3;
         break;
     case 0xe5:
-     	printf("PUSH H	1		(sp-2)<-L; (sp-1)<-H; sp <- sp - 2");
+     	printf("PUSH    H");
         break;
     case 0xe6:
-     	printf("ANI D8	2	Z, S, P, CY, AC	A <- A & data");
+     	printf("ANI     #$%02x", code[1]);
+        opbytes = 3;
         break;
     case 0xe7:
-     	printf("RST 4	1		CALL $20");
+     	printf("RST     4");
         break;
     case 0xe8:
-     	printf("RPE	1		if PE, RET");
+     	printf("RPE");
         break;
     case 0xe9:
-     	printf("PCHL	1		PC.hi <- H; PC.lo <- L");
+     	printf("PCHL");
         break;
     case 0xea:
-     	printf("JPE adr	3		if PE, PC <- adr");
+     	printf("JPE     #$%02x%02x", code[2], code[1]);
+        opbytes = 3;
         break;
     case 0xeb:
-     	printf("XCHG	1		H <-> D; L <-> E");
+     	printf("XCHG");
         break;
     case 0xec:
-     	printf("CPE adr	3		if PE, CALL adr");
+     	printf("CPE     #$%02x%02x", code[2], code[1]);
+        opbytes = 3;
         break;
     case 0xed:
-     	printf("-			");
+     	printf("NOP");
         break;
     case 0xee:
-     	printf("XRI D8	2	Z, S, P, CY, AC	A <- A ^ data");
+     	printf("XRI     #$%02x", code[1]);
+        opbytes = 2;
         break;
     case 0xef:
-     	printf("RST 5	1		CALL $28");
+     	printf("RST     5");
         break;
     case 0xf0:
-     	printf("RP	1		if P, RET");
+     	printf("RP");
         break;
     case 0xf1:
-     	printf("POP PSW	1		flags <- (sp); A <- (sp+1); sp <- sp+2");
+     	printf("POP     PSW");
         break;
     case 0xf2:
-     	printf("JP adr	3		if P=1 PC <- adr");
+     	printf("JP      #$%02x%02x", code[2], code[1]);
+        opbytes = 3;
         break;
     case 0xf3:
-     	printf("DI	1		special");
+     	printf("DI");
         break;
     case 0xf4:
-     	printf("CP adr	3		if P, PC <- adr");
+     	printf("CP      #$%02x%02x", code[2], code[1]);
+        opbytes = 3;
         break;
     case 0xf5:
-     	printf("PUSH PSW	1		(sp-2)<-flags; (sp-1)<-A; sp <- sp - 2");
+     	printf("PUSH    PSW");
         break;
     case 0xf6:
-     	printf("ORI D8	2	Z, S, P, CY, AC	A <- A | data");
+     	printf("ORI     #$%02x", code[1]);
+        opbytes = 3;
         break;
     case 0xf7:
-     	printf("RST 6	1		CALL $30");
+     	printf("RST     6");
         break;
     case 0xf8:
-     	printf("RM	1		if M, RET");
+     	printf("RM");
         break;
     case 0xf9:
-     	printf("SPHL	1		SP=HL");
+     	printf("SPHL");
         break;
     case 0xfa:
-     	printf("JM adr	3		if M, PC <- adr");
+     	printf("JM      #$%02x%02x", code[2], code[1]);
+        opbytes = 3;
         break;
     case 0xfb:
-     	printf("EI	1		special");
+     	printf("EI");
         break;
     case 0xfc:
-     	printf("CM adr	3		if M, CALL adr");
+     	printf("CM      #$%02x%02x", code[2], code[1]);
+        opbytes = 3;
         break;
     case 0xfd:
-     	printf("-			");
+     	printf("NOP");
         break;
     case 0xfe:
-     	printf("CPI D8	2	Z, S, P, CY, AC	A - data");
+     	printf("CPI     #$%02x", code[1]);
+        opbytes = 2;
         break;
     case 0xff:
-     	printf("RST 7	1		CALL $38");
+     	printf("RST     7");
         break;
     }
     return 0;
