@@ -1,18 +1,49 @@
 /**
+ * disassembler.c
  * Description: This is a disassembler for the Intel 8080 CPU.
  * Author: Zachary Hansen Terry
  */
 
 #include <stdio.h>
+#include <stdint.h>
 #include <unistd.h>
+#include <libgen.h>
+#include <string.h>
+#include <getopt.h>
+#include <stdlib.h>
+
+#define OPTSTR "vi:o:f:h"
+#define USAGE_FMT  "%s [-i input_folder] [-o outputfile]"
+
+extern int errno;
+
+typedef struct
+{
+    uint_32 flags;
+    char* input_name;
+    char* output_name;
+} arguments_t;
 
 int Disassemble8080(unsigned char *codebuffer, int pc);
 
 int main(int argc, char *argv[])
 {
+    arguments_t = {0x0, "stdin", "stdio"};
+
+    char* file_name;
+    scanf("%s", file_name);
+    FILE* binary = fopen(file_name, "r");
+    if(code == NULL)
+    {
+        printf("ERROR: Unable to open file: %s\n");
+        exit(EXIT_FALIURE);
+    }
+
+    while(code != NULL)
 
     return 0;
 }
+
 
 int Disassemble8080(unsigned char *codebuffer, int pc)
 {
