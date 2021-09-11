@@ -12,34 +12,38 @@
 #include <getopt.h>
 #include <stdlib.h>
 
-#define OPTSTR "vi:o:f:h"
 #define USAGE_FMT  "%s [-i input_folder] [-o outputfile]"
+#define MAX_BUFF 1000000
 
 extern int errno;
 
 typedef struct
 {
-    uint_32 flags;
-    char* input_name;
-    char* output_name;
+    char* input_folder;
+    char* output_file;
 } arguments_t;
 
 int Disassemble8080(unsigned char *codebuffer, int pc);
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
-    arguments_t = {0x0, "stdin", "stdio"};
+    arguments_t options = {"stdin", "stdio"};
+    if(argc >= 1)
+    {
+        options.input_folder = argv[1];
+        options.output_folder = argv[2];
+    }
 
-    char* file_name;
-    scanf("%s", file_name);
-    FILE* binary = fopen(file_name, "r");
+    
+    
+    FILE* folder = fopen(options.input, "rb"); /* The B is for binary, R is for read */
     if(code == NULL)
     {
         printf("ERROR: Unable to open file: %s\n");
         exit(EXIT_FALIURE);
     }
 
-    while(code != NULL)
+    Disassemble8080()
 
     return 0;
 }
@@ -864,5 +868,5 @@ int Disassemble8080(unsigned char *codebuffer, int pc)
      	printf("RST     7");
         break;
     }
-    return 0;
+    return opbytes;
 }
