@@ -5,6 +5,7 @@ DEBUGFLAGS=-g -O0
 
 all: disassembler cpu ram rom display
 
+
 emulator: cpu ram rom display
 
 disassembler: disassembler.o
@@ -23,8 +24,9 @@ rom:
 display:
 
 
-disassembler.o: src/Disassembler/disassembler.c
-	$(CC) $(CFLAGS) $(DEBUGFLAGS) src/Disassembler/disassembler.c -o obj/disassembler.o
+disassembler.o: src/disassembler.c
+	mkdir bin obj
+	$(CC) $(CFLAGS) $(DEBUGFLAGS) src/disassembler.c -o obj/disassembler.o
 
 clean:
 	rm -rf bin/* obj/*
