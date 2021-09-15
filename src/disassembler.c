@@ -15,40 +15,35 @@
 #include <stdlib.h>
 
 
-int main(int argc, char **argv)
+int disassemble(char* filename)
 {
-	char* input_file = "stdio"; //Default is stdio
-	if(argc > 1)
-	{ 
-		input_file = argv[1];
-	}
-	else 
+	if(filename == NULL)
 	{
-		fprintf(stderr, "Format: disassembler <inputfile>\n");
+		filename = "stdin";
+	}
+	FILE* input_file;
+
+	if((input_file = fopen(filename, "rb")) == NULL)
+	{
+		printf("Error: could not open file");
 		return EXIT_FAILURE;
 	}
 
-	FILE* in_file = fopen(input_file, "rb"); // The B is for binary, R is for read 
-	if(in_file == NULL)
-	{
-		printf("ERROR: Unable to open file: %s\n", input_file);
-		exit(-1);
-	}
 
 	
 
-	fseek(in_file, 0, SEEK_END);	// Go to end of file
-	long fsize = ftell(in_file);	// Find length of file
-	fseek(in_file, 0, SEEK_SET);	// Rewind to begining of file
+	fseek(input_file, 0, SEEK_END);	
+	long fsize = ftell(input_file);	
+	fseek(input_file, 0, SEEK_SET);	
 
-	unsigned char *buff = malloc(fsize + 1);	// Creates the buffer pointer
-	fread(buff, 1, fsize, in_file);				// Reads file into the buffer
-	fclose(in_file);							// Closes the file for performance
+	unsigned char *buff = malloc(fsize + 1);	
+	fread(buff, 1, fsize, input_file);				
+	fclose(input_file);							
 
-	buff[fsize] = 0;							// Null terminate the string
+	buff[fsize] = 0;							
 
 
-	for (int i = 0; i < fsize; i+= 1)			// For opbytes and stuff
+	for (int i = 0; i < fsize; i+= 1)			
 	{
 		switch (Disassemble8080(buff, i))
 		{
@@ -70,13 +65,6 @@ int main(int argc, char **argv)
 }
 
 
-/**
- * 
- * @brief Pass this puppy the buffer to the code, and where the opcode is, and it will print to the screen the assembly version of it.
- * @param codebuffer character pointer to buffer containing code
- * @param pc program counter that says where in the buffer you are.
- * @return opbytes used
- */
 int Disassemble8080(unsigned char *codebuffer, int pc)
 {
 	unsigned char *code = &codebuffer[pc];

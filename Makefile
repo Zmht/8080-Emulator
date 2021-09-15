@@ -1,26 +1,22 @@
 CC=clang
-CFLAGS=-Wall -Werror
-DEBUGFLAGS=-g -O0
+CFLAGS=-Wall -Werror -g
+SRC=src
+OBJ=obj
+SRCS=$(wildcard $(SRC)/*.c)
+OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
+
+PROJ_NAME=zemulator
+BIN=bin/$(PROJ_NAME)
 
 
-all: emulator
-	mkdir -p bin obj
+all: $(BIN)
 
 
-emulator: cpu.o ram.o rom.o display.o
-	$(CC) $(CFLAGS) $(DEBUGFLAGS) -o bin/emulator obj/cpu.o obj/ram.o obj/rom.o obj/display.o 
+$(BIN): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $@
 
-cpu.o:
-	$(CC) $(CFLAGS) $(DEBUGFLAGS) -c src/cpu.c -o obj/cpu.o
-
-ram.o:
-	$(CC) $(CFLAGS) $(DEBUGFLAGS) -c src/ram.c -o obj/ram.o
-
-rom.o:
-	$(CC) $(CFLAGS) $(DEBUGFLAGS) -c src/rom.c -o obj/rom.o
-
-display.o:
-	$(CC) $(CFLAGS) $(DEBUGFLAGS) -c src/display.c -o obj/display.o
+$(OBJ)/%.o: $(SRC)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf bin/* obj/*
+	rm -f bin/* obj/*
