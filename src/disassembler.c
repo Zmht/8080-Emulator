@@ -17,31 +17,38 @@
 
 int main(int argc, char **argv)
 {
-	arguments_t options = {"stdin", "stdio"};
-	if(argc >= 1)
+	char* input_file = "stdio"; //Default is stdio
+	if(argc > 1)
 	{ 
-		options.input_file = argv[1];
-		options.output_file = argv[2];
+		input_file = argv[1];
+	}
+	else 
+	{
+		fprintf(stderr, "Format: disassembler <inputfile>\n");
+		return EXIT_FAILURE;
 	}
 
-	FILE* in_file = fopen(options.input_file, "rb"); /* The B is for binary, R is for read */
+	FILE* in_file = fopen(input_file, "rb"); // The B is for binary, R is for read 
 	if(in_file == NULL)
 	{
-		printf("ERROR: Unable to open file: %s\n", options.input_file);
+		printf("ERROR: Unable to open file: %s\n", input_file);
 		exit(-1);
 	}
 
-	fseek(in_file, 0, SEEK_END);
-	long fsize = ftell(in_file);
-	fseek(in_file, 0, SEEK_SET);  /* same as rewind(f); */
+	
 
-	unsigned char *buff = malloc(fsize + 1);
-	fread(buff, 1, fsize, in_file);
-	fclose(in_file);
+	fseek(in_file, 0, SEEK_END);	// Go to end of file
+	long fsize = ftell(in_file);	// Find length of file
+	fseek(in_file, 0, SEEK_SET);	// Rewind to begining of file
 
-	buff[fsize] = 0;
+	unsigned char *buff = malloc(fsize + 1);	// Creates the buffer pointer
+	fread(buff, 1, fsize, in_file);				// Reads file into the buffer
+	fclose(in_file);							// Closes the file for performance
 
-	for (int i = 0; i < fsize; i+= 1)
+	buff[fsize] = 0;							// Null terminate the string
+
+
+	for (int i = 0; i < fsize; i+= 1)			// For opbytes and stuff
 	{
 		switch (Disassemble8080(buff, i))
 		{
@@ -58,12 +65,18 @@ int main(int argc, char **argv)
 	}
 	
 
-	free(buff);
+	free(buff);									// Free buffer
 	return 0;
 }
 
 
-
+/**
+ * 
+ * @brief Pass this puppy the buffer to the code, and where the opcode is, and it will print to the screen the assembly version of it.
+ * @param codebuffer character pointer to buffer containing code
+ * @param pc program counter that says where in the buffer you are.
+ * @return opbytes used
+ */
 int Disassemble8080(unsigned char *codebuffer, int pc)
 {
 	unsigned char *code = &codebuffer[pc];

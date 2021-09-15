@@ -1,32 +1,26 @@
 CC=clang
-CFLAGS=-Wall -c -Werror
+CFLAGS=-Wall -Werror
 DEBUGFLAGS=-g -O0
 
 
-all: disassembler cpu ram rom display
+all: emulator
+	mkdir -p bin obj
 
 
-emulator: cpu ram rom display
+emulator: cpu.o ram.o rom.o display.o
+	$(CC) $(CFLAGS) $(DEBUGFLAGS) -o bin/emulator obj/cpu.o obj/ram.o obj/rom.o obj/display.o 
 
-disassembler: disassembler.o
-	rm -rf roms/invaders/invaders.s
-	$(CC) obj/disassembler.o -o bin/disassembler
+cpu.o:
+	$(CC) $(CFLAGS) $(DEBUGFLAGS) -c src/cpu.c -o obj/cpu.o
 
-cpu:
+ram.o:
+	$(CC) $(CFLAGS) $(DEBUGFLAGS) -c src/ram.c -o obj/ram.o
 
+rom.o:
+	$(CC) $(CFLAGS) $(DEBUGFLAGS) -c src/rom.c -o obj/rom.o
 
-ram:
-
-
-rom:
-
-
-display:
-
-
-disassembler.o: src/disassembler.c
-	mkdir bin obj
-	$(CC) $(CFLAGS) $(DEBUGFLAGS) src/disassembler.c -o obj/disassembler.o
+display.o:
+	$(CC) $(CFLAGS) $(DEBUGFLAGS) -c src/display.c -o obj/display.o
 
 clean:
 	rm -rf bin/* obj/*
