@@ -1,5 +1,11 @@
 {
     "files.associations": {
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "*.tcc": "c",
+        "chrono": "c",
+        "cstdlib": "c",
+        "system_error": "c",
+        "typeinfo": "c",
+        "cmath": "c"
     }
 }
