@@ -11,8 +11,8 @@ BIN=bin/$(PROJ_NAME)
 
 all: $(BIN) bin_maker
 
-bin_maker: src/binary_maker
-	$(CC) $(CFLAGS) -o bin/$@
+bin_maker: src/binary_maker/binary_maker.c
+	$(CC) $(CFLAGS) $< -o bin/$@
 
 
 $(BIN): $(OBJS)

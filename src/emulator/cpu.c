@@ -6,58 +6,57 @@
  ***********************************************************************/
 
 #include "cpu.h"
+#include "emu.h"
+#include "emutils.h"
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef struct
+
+
+
+
+
+int init_cpu(cpu_8080* cpu)
 {
-    uint8_t A;
-    uint8_t F;
-
-    uint8_t B;
-    uint8_t C;
-
-    uint8_t D;
-    uint8_t E;
-
-    uint8_t H;
-    uint8_t L;
-
-} registers_8080;
-
-uint16_t adress_bus;
-uint16_t data_bus;
-
-uint32_t stack_pointer;
-uint32_t program_counter;
-
-registers_8080 regs;
-
-
-int init_cpu(void)
-{
-    program_counter = 0;    //Code execution starts at memory location 0x00
-    if(program_counter == 0)
-        return EXIT_SUCCESS;
-    else
-    {
-        printf("CPU Init Error\n");
-        return EXIT_FAILURE;
-    }
+	cpu->program_counter = 0x00;    //Code execution starts at memory location 0x00
+	if(cpu->program_counter == 0x00)
+		return EXIT_SUCCESS;
+	else
+	{
+		printf("CPU Init Error\n");
+		return EXIT_FAILURE;
+	}
 }
 
-int exec_instruction(char* rombuffer, int pc)
+int exec_instruction(cpu_8080* cpu)
 {
-    char instruction = rombuffer[pc];
+	int opbytes = 0;
 
-    switch(instruction)
-    {
-        case 0x01:
-            printf("Hello World");
-            break;
-        
-    }
-    return 0;
+	switch(cpu->instruction)
+	{
+		case 0x00:		//NOP
+			printf("NOP\n");
+			opbytes = 1;
+			break;
+		case 0x01:		//LXI B register pair
+			opbytes = 3;
+			cpu->B = cpu->memory[cpu->program_counter + 1];
+			cpu->C = cpu->memory[cpu->program_counter + 2];
+			break;
+		case 0x02:		// STAX
+			opbytes = 1;
+			
+			
+
+
+
+		default:
+			opcode_error(cpu->instruction);
+			exit(EXIT_FAILURE);	
+	}
+	
+	return opbytes;
 }
 
