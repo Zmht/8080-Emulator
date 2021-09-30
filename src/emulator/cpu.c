@@ -89,6 +89,10 @@ int exec_instruction(cpu_8080* cpu)
 		case 0x03:		// INX B. Incriments the number in the B reg pair
 			opbytes = 1;
 			add_reg_pair(&cpu->B, &cpu->C, 1);
+			break;	
+		case 0x04:		// INR B. register is incremented by one
+			opbytes = 1;
+			cpu->B = ++cpu->B;
 			break;
 		case 0x08:		// NOP alt
 			opbytes = 1;
@@ -96,6 +100,10 @@ int exec_instruction(cpu_8080* cpu)
 		case 0x0A:	 	// LDAX B. Contents of mem adress stored in B reg pair go into the accuulator
 			opbytes = 1;
             cpu->A = read_memory_byte(cpu, make_word(&cpu->B, &cpu->C));
+			break;
+		case 0x0C:		// INR C. register is incremented by one
+			opbytes = 1;
+			cpu->C = ++cpu->C;
 			break;
 		case 0x10:		// NOP alt
 			opbytes = 1;
@@ -105,13 +113,6 @@ int exec_instruction(cpu_8080* cpu)
 			cpu->D = read_memory_byte(cpu, cpu->program_counter + 2);
 			cpu->E = read_memory_byte(cpu, cpu->program_counter + 1);
 			break;
-		case 0x18:		//NOP alt
-			opbytes = 1;
-			break;
-		case 0x1A:		// LDAX D. Contents of mem addr stored in D reg pair got to accmumulator (A reg)
-			opbytes = 1;
-			cpu->A = read_memory_byte(cpu, make_word(&cpu->B, &cpu->C));
-			break;
 		case 0x12:		//STAX D. Takes the contents of the accumulator (A reg) and puts them at the location in D reg pair
 			opbytes = 1;
 			wrtie_memory_byte(cpu, make_word(&cpu->D, &cpu->E), cpu->A);
@@ -119,6 +120,21 @@ int exec_instruction(cpu_8080* cpu)
 		case 0x13:		// INX D. Increments the number in the D reg pair
 			opbytes = 1;
 			add_reg_pair(&cpu->D, &cpu->E, 1);
+			break;
+		case 0x14:		// INR D. register is incremented by one
+			opbytes = 1;
+			cpu->D = ++cpu->D;
+			break;
+		case 0x18:		//NOP alt
+			opbytes = 1;
+			break;
+		case 0x1A:		// LDAX D. Contents of mem addr stored in D reg pair got to accmumulator (A reg)
+			opbytes = 1;
+			cpu->A = read_memory_byte(cpu, make_word(&cpu->B, &cpu->C));
+			break;
+		case 0x1C:		// INR E. register is incremented by one
+			opbytes = 1;
+			cpu->E = ++cpu->E;
 			break;
 		case 0x20:		// NOP alt
 			opbytes = 1;
@@ -132,8 +148,16 @@ int exec_instruction(cpu_8080* cpu)
 			opbytes = 1;
 			add_reg_pair(&cpu->H, &cpu->L, 1);
 			break;
+		case 0x24:		// INR H. register is incremented by one
+			opbytes = 1;
+			cpu->H = ++cpu->H;
+			break;
 		case 0x28:		// NOP alt
 			opbytes =1;
+			break;
+		case 0x2C:		// INR L. register is incremented by one
+			opbytes = 1;
+			cpu->L = ++cpu->L;
 			break;
 		case 0x30:		// NOP alt
 			opbytes = 1;
@@ -148,6 +172,10 @@ int exec_instruction(cpu_8080* cpu)
 			break;
 		case 0x38:		// NOP alt
 			opbytes =1;
+			break;
+		case 0x3C:		// INR A. accumulator is incremented by one
+			opbytes = 1;
+			cpu->A = ++cpu->C;
 			break;
 			
 
