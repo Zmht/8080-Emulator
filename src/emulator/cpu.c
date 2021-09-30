@@ -170,6 +170,7 @@ int exec_instruction(cpu_8080* cpu)
 			opbytes = 1;
 			cpu->stack_pointer = cpu->stack_pointer + 1;
 			break;
+FIX THE INR INSTRUCTION BECAUSE OF CONDITION BITS!!!!
 		case 0x38:		// NOP alt
 			opbytes =1;
 			break;
