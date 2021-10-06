@@ -6,6 +6,7 @@
  ***********************************************************************/
 
 #include "shell.h"
+#include "instruction.n"
 #include "emutils.h"
 #include "disassembler.h"
 #include "emu.h"
@@ -91,13 +92,7 @@ int process()
 
 	if(strcmp(command, "emulate") == 0)
 	{
-		emulate("roms/invaders/invaders.rom", 1);
-		return 0;
-	}
-
-	if(strcmp(command, "inst") == 0)
-	{
-		printf("This is the individual instruction commmand.\n");
+		emulate_rom("roms/invaders/invaders.rom", 1);
 		return 0;
 	}
 
@@ -110,6 +105,12 @@ int process()
 	if(strcmp(command, "assemble") == 0)
 	{
 		printf("Assemble time???\n");
+		return 0;
+	}
+	
+	if(srcmp(command, "inst") == 0)
+	{
+		ins_shell();
 		return 0;
 	}
 

@@ -15,8 +15,20 @@
 
 
 
+void emulate_instruction(char* ins)
+{
+	cpu_8080 cpu;
+	cpu.memory = ins;
+	init_cpu(&cpu);
+	for(int i = 0; i < sizeof(ins); i++)
+	{
+		cpu.program_counter = i;
+		cpu.instruction = cpu.memory[i];
+		exec_instruction(&cpu);
+	}
+}
 
-int emulate(char* romname, int verbose)
+int emulate_rom(char* romname, int verbose)
 {
     cpu_8080 cpu;
 

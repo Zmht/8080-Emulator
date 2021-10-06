@@ -3,7 +3,8 @@
 
 #include <stdint.h>
 
-int emulate(char* romname, int verbose);
+int emulate_rom(char* romname, int verbose);
+void emulate_instruction(char* inst);
 
 typedef struct
 {
