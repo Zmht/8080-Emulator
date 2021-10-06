@@ -173,17 +173,23 @@ uint16_t make_word(uint8_t l, uint8_t r)
 	return word;
 }
 
-
 int init_cpu(cpu_8080* cpu)
 {
 	cpu->program_counter = 0x00;    //Code execution starts at memory location 0x00
-	if(cpu->program_counter == 0x00)
-		return EXIT_SUCCESS;
-	else
-	{
-		printf("CPU Init Error\n");
-		return EXIT_FAILURE;
-	}
+	cpu->A = 0;
+	cpu->B = 0;
+	cpu->C = 0;
+	cpu->D = 0;
+	cpu->E = 0;
+	cpu->L = 0;
+	cpu->carry		= 0;
+	cpu->aux_carry 	= 0;
+	cpu->sign 		= 0;
+	cpu->zero 		= 0;
+	cpu->parity		= 0;
+	return 0;
+
+	
 }
 
 int exec_instruction(cpu_8080* cpu)
@@ -338,7 +344,8 @@ int exec_instruction(cpu_8080* cpu)
 			break;
 		default:
 			opcode_error(cpu->instruction);
-			exit(EXIT_FAILURE);	
+			break;
+			//exit(EXIT_FAILURE);	
 	}
 	
 	return opbytes;

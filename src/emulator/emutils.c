@@ -7,5 +7,5 @@ void emulator_error(const char* file, const char* msg)
 
 void opcode_error(unsigned char opcode)
 {
-    printf("\033[1;31m%02x is not implemented yet!", opcode);
+    printf("\033[1;31m%02x is not implemented yet!\033[1;0m\n", opcode);
 }

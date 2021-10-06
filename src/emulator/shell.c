@@ -6,7 +6,7 @@
  ***********************************************************************/
 
 #include "shell.h"
-#include "instruction.n"
+#include "instruction.h"
 #include "emutils.h"
 #include "disassembler.h"
 #include "emu.h"
@@ -108,7 +108,7 @@ int process()
 		return 0;
 	}
 	
-	if(srcmp(command, "inst") == 0)
+	if(strcmp(command, "inst") == 0)
 	{
 		ins_shell();
 		return 0;

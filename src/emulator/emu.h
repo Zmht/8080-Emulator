@@ -3,13 +3,9 @@
 
 #include <stdint.h>
 
-int emulate_rom(char* romname, int verbose);
-void emulate_instruction(char* inst);
-
 typedef struct
 {
 	uint8_t A;
-	uint8_t F;
 
 	uint8_t B;
 	uint8_t C;
@@ -36,5 +32,9 @@ typedef struct
 	uint32_t program_counter;
 
 } cpu_8080;
+
+int emulate_rom(char* romname, int verbose);
+void emulate_instruction(char* inst);
+void print_state(cpu_8080 *cpu);
 
 #endif

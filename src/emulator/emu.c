@@ -13,19 +13,33 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
+void print_state(cpu_8080 *cpu)
+{
+	printf("\
+	INS: %X\n\
+	B: %X, C: %X\n\
+	D: %X, E: %X\n\
+	H: %X, L: %X\n\
+	A: %X, PC: %X, SP: %X\n\
+	carry: %d, aux: %d, parity: %d, sign: %d, zero: %d\n",\
+	cpu->instruction, \
+	cpu->B, cpu->C, \
+	cpu->D, cpu->E, \
+	cpu->H, cpu->L, \
+	cpu->A, cpu->program_counter, cpu->stack_pointer, \
+	cpu->carry, cpu->aux_carry, cpu-> parity, cpu->sign, cpu->zero);
+}
 
 void emulate_instruction(char* ins)
 {
 	cpu_8080 cpu;
 	cpu.memory = ins;
 	init_cpu(&cpu);
-	for(int i = 0; i < sizeof(ins); i++)
-	{
-		cpu.program_counter = i;
-		cpu.instruction = cpu.memory[i];
-		exec_instruction(&cpu);
-	}
+	cpu.program_counter = 0;
+	cpu.instruction = cpu.memory[cpu.program_counter];
+	exec_instruction(&cpu);
+
+	print_state(&cpu);
 }
 
 int emulate_rom(char* romname, int verbose)
