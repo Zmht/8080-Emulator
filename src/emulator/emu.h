@@ -19,6 +19,12 @@ typedef struct
 	uint8_t H;
 	uint8_t L;
 
+	unsigned int carry 		: 1;
+	unsigned int aux_carry 	: 1;
+	unsigned int sign 		: 1;
+	unsigned int zero 		: 1;
+	unsigned int parity		: 1;
+
     unsigned char instruction;
     char* memory;
 

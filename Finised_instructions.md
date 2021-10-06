@@ -1,0 +1,6 @@
+INR
+INX
+NOP
+LXI
+SHLD
+DCR
