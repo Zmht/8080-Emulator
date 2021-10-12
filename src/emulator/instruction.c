@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include "emu.h"
+
+
 
 void ins_prompt()
 {
@@ -18,8 +21,18 @@ void process_ins()
 	{
 		ins_c[i] = ins[i];
 
-	}	
-	emulate_instruction(ins_c);	
+	}
+
+	static cpu_8080 cpu;
+	static int init = 0;
+	if (init == 0)
+	{
+		init_cpu(&cpu);
+		init = 1;
+	}
+
+
+	emulate_instruction(ins_c, &cpu);	
 }
 
 void ins_shell()

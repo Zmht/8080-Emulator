@@ -30,16 +30,15 @@ void print_state(cpu_8080 *cpu)
 	cpu->carry, cpu->aux_carry, cpu-> parity, cpu->sign, cpu->zero);
 }
 
-void emulate_instruction(char* ins)
+void emulate_instruction(char* ins, cpu_8080 *cpu)
 {
-	cpu_8080 cpu;
-	cpu.memory = ins;
-	init_cpu(&cpu);
-	cpu.program_counter = 0;
-	cpu.instruction = cpu.memory[cpu.program_counter];
-	exec_instruction(&cpu);
+	cpu->memory = ins;
+	//init_cpu(cpu);
+	cpu->program_counter = 0;
+	cpu->instruction = cpu->memory[cpu->program_counter];
+	exec_instruction(cpu);
 
-	print_state(&cpu);
+	print_state(cpu);
 }
 
 int emulate_rom(char* romname, int verbose)
@@ -89,4 +88,27 @@ int emulate_rom(char* romname, int verbose)
     return 0;
 
     //exec_instruction(romfile);
+}
+
+int init_cpu(cpu_8080* cpu)
+{
+	cpu->program_counter = 0x00;    //Code execution starts at memory location 0x00
+	cpu->A = 0;
+
+	cpu->B = 0;
+	cpu->C = 0;
+
+	cpu->D = 0;
+	cpu->E = 0;
+
+	cpu->H = 0;
+	cpu->L = 0;
+
+	cpu->carry		= 0;
+	cpu->aux_carry 	= 0;
+	cpu->sign 		= 0;
+	cpu->zero 		= 0;
+	cpu->parity		= 0;
+
+	return 0;
 }

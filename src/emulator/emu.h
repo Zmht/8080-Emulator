@@ -28,13 +28,15 @@ typedef struct
 	uint16_t adress_bus;
 	uint16_t data_bus;
 
-	uint32_t stack_pointer;
-	uint32_t program_counter;
+	uint16_t stack_pointer;
+	uint16_t program_counter;
 
 } cpu_8080;
 
 int emulate_rom(char* romname, int verbose);
-void emulate_instruction(char* inst);
+void emulate_instruction(char* inst, cpu_8080* cpu);
 void print_state(cpu_8080 *cpu);
+int init_cpu(cpu_8080* cpu);
+
 
 #endif

@@ -8,7 +8,6 @@
 
 #include "emu.h"
 
-int init_cpu(cpu_8080* cpu);
 int exec_instruction(cpu_8080* cpu);
 
 #endif
