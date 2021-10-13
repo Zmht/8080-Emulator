@@ -13,7 +13,8 @@ void ins_prompt()
 void process_ins()
 {
 	unsigned int ins[3];
-	scanf("%x", ins);
+	
+	scanf("%x%x", &ins[0], &ins[1]);
 
 	char ins_c[3];
 
