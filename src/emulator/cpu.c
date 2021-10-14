@@ -1217,10 +1217,6 @@ int exec_instruction(cpu_8080* cpu)
 				cpu->stack_pointer -=1;
 			}
 			break;
-		case 0xC1:		// POP
-			opbytes =1;
-			
-			break;
 		case 0xC8:		// RZ.
 			opbytes =1;
 			if(cpu->zero == 1)
