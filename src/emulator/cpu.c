@@ -107,12 +107,211 @@ void add_to_reg(cpu_8080* cpu, uint8_t *reg, uint8_t val)
 	*reg = (sum & 0xFF);
 }
 
+void carry_add_to_reg(cpu_8080* cpu, uint8_t *reg, uint8_t val)
+{
+	uint16_t sum = *reg + val;
+	//sign, aux, parity, zero
+	cpu->zero = 0;	// reseting the zero bit to false
+	cpu->sign = BIT_CHECK(sum, 8);
+	cpu->carry = BIT_CHECK(sum, 9);
+
+	int one_bits = 0;
+	for (int i = 0; i < 8; i++)
+	{
+		if(((sum & 0xFF) & (1 << i)) == (1 << i))
+			one_bits += 1;
+	}
+
+	check_aux_cary(cpu, &sum, reg, &val);
+
+	if((one_bits % 2) == 1)
+	{
+		cpu->parity = 0;
+	}
+	else if((one_bits & 2) == 0)
+	{
+		cpu->parity = 1;
+	}
+
+	if((sum & 0xFF) == 0)
+	{
+		cpu->zero = 1;
+	}
+
+	*reg = (sum & 0xFF);
+}
+
+void carry_xor_to_reg(cpu_8080* cpu, uint8_t *reg, uint8_t val)
+{
+	uint16_t sum = *reg ^ val;
+	//sign, aux, parity, zero
+	cpu->zero = 0;	// reseting the zero bit to false
+	cpu->sign = BIT_CHECK(sum, 8);
+	cpu->carry = BIT_CHECK(sum, 9);
+
+	int one_bits = 0;
+	for (int i = 0; i < 8; i++)
+	{
+		if(((sum & 0xFF) & (1 << i)) == (1 << i))
+			one_bits += 1;
+	}
+
+	check_aux_cary(cpu, &sum, reg, &val);
+
+	if((one_bits % 2) == 1)
+	{
+		cpu->parity = 0;
+	}
+	else if((one_bits & 2) == 0)
+	{
+		cpu->parity = 1;
+	}
+
+	if((sum & 0xFF) == 0)
+	{
+		cpu->zero = 1;
+	}
+
+	*reg = (sum & 0xFF);
+}
+
+void carry_or_to_reg(cpu_8080* cpu, uint8_t *reg, uint8_t val)
+{
+	uint16_t sum = *reg | val;
+	//sign, aux, parity, zero
+	cpu->zero = 0;	// reseting the zero bit to false
+	cpu->sign = BIT_CHECK(sum, 8);
+	cpu->carry = BIT_CHECK(sum, 9);
+
+	int one_bits = 0;
+	for (int i = 0; i < 8; i++)
+	{
+		if(((sum & 0xFF) & (1 << i)) == (1 << i))
+			one_bits += 1;
+	}
+
+	check_aux_cary(cpu, &sum, reg, &val);
+
+	if((one_bits % 2) == 1)
+	{
+		cpu->parity = 0;
+	}
+	else if((one_bits & 2) == 0)
+	{
+		cpu->parity = 1;
+	}
+
+	if((sum & 0xFF) == 0)
+	{
+		cpu->zero = 1;
+	}
+
+	*reg = (sum & 0xFF);
+}
+
+void carry_cmp_to_reg(cpu_8080* cpu, uint8_t *reg, uint8_t val)
+{
+	uint16_t sum = *reg - val;
+	//sign, aux, parity, zero
+	cpu->zero = 0;	// reseting the zero bit to false
+	cpu->sign = BIT_CHECK(sum, 8);
+	cpu->carry = BIT_CHECK(sum, 9);
+
+	int one_bits = 0;
+	for (int i = 0; i < 8; i++)
+	{
+		if(((sum & 0xFF) & (1 << i)) == (1 << i))
+			one_bits += 1;
+	}
+
+	check_aux_cary(cpu, &sum, reg, &val);
+
+	if((one_bits % 2) == 1)
+	{
+		cpu->parity = 0;
+	}
+	else if((one_bits & 2) == 0)
+	{
+		cpu->parity = 1;
+	}
+
+	if((sum & 0xFF) == 0)
+	{
+		cpu->zero = 1;
+	}
+}
+
+void carry_and_to_reg(cpu_8080* cpu, uint8_t *reg, uint8_t val)
+{
+	uint16_t sum = *reg & val;
+	//sign, aux, parity, zero
+	cpu->zero = 0;	// reseting the zero bit to false
+	cpu->sign = BIT_CHECK(sum, 8);
+	cpu->carry = BIT_CHECK(sum, 9);
+
+	int one_bits = 0;
+	for (int i = 0; i < 8; i++)
+	{
+		if(((sum & 0xFF) & (1 << i)) == (1 << i))
+			one_bits += 1;
+	}
+
+	check_aux_cary(cpu, &sum, reg, &val);
+
+	if((one_bits % 2) == 1)
+	{
+		cpu->parity = 0;
+	}
+	else if((one_bits & 2) == 0)
+	{
+		cpu->parity = 1;
+	}
+
+	if((sum & 0xFF) == 0)
+	{
+		cpu->zero = 1;
+	}
+
+	*reg = (sum & 0xFF);
+}
+
 void sub_from_reg(cpu_8080* cpu, uint8_t *reg, uint8_t val)
 {
 	uint16_t ans = *reg - val;
 	//sign, aux, parity, zero
 	cpu->zero = 0;	// reseting the zero bit to false
 	cpu->sign = (ans & 0x80);
+	check_aux_cary(cpu, &ans, reg, &val);
+
+	int one_bits = 0;
+	for (int i = 0; i < 8; i++)
+	{
+		if(((ans & 0xFF) & (1 << i)) == (1 << i))
+			one_bits += 1;
+	}
+	if((one_bits % 2) == 1)
+	{
+		cpu->parity = 0;
+	}
+	else
+		cpu->parity = 1;
+
+	if((ans & 0xFF) == 0)
+	{
+		cpu->zero = 1;
+	}
+
+	*reg = (ans & 0xFF);
+
+}
+
+void carry_sub_from_reg(cpu_8080* cpu, uint8_t *reg, uint8_t val)
+{
+	uint16_t ans = *reg - val;
+	//sign, aux, parity, zero
+	cpu->zero = 0;	// reseting the zero bit to false
+	cpu->sign = (ans & 0x80);
+	cpu->carry = BIT_CHECK(ans, 9);
 	check_aux_cary(cpu, &ans, reg, &val);
 
 	int one_bits = 0;
@@ -754,9 +953,341 @@ int exec_instruction(cpu_8080* cpu)
 			opbytes = 1;
 			cpu->A = cpu->A;
 			break;
-		
-		
-		
+		case 0x80: 		// ADD. bytes is added to accumulator
+			opbytes = 1;
+			carry_add_to_reg(cpu, &cpu->A, cpu->B);
+			break;
+		case 0x81: 		// ADD. bytes is added to accumulator
+			opbytes = 1;
+			carry_add_to_reg(cpu, &cpu->A, cpu->C);
+			break;
+		case 0x82: 		// ADD. bytes is added to accumulator
+			opbytes = 1;
+			carry_add_to_reg(cpu, &cpu->A, cpu->D);
+			break;
+		case 0x83: 		// ADD. bytes is added to accumulator
+			opbytes = 1;
+			carry_add_to_reg(cpu, &cpu->A, cpu->E);
+			break;
+		case 0x84: 		// ADD. bytes is added to accumulator
+			opbytes = 1;
+			carry_add_to_reg(cpu, &cpu->A, cpu->H);
+			break;
+		case 0x85: 		// ADD. bytes is added to accumulator
+			opbytes = 1;
+			carry_add_to_reg(cpu, &cpu->A, cpu->L);
+			break;
+		case 0x86: 		// ADD. bytes is added to accumulator
+			opbytes = 1;
+			carry_add_to_reg(cpu, &cpu->A, read_memory_byte(cpu, make_word(cpu->H, cpu->L)));
+			break;
+		case 0x87: 		// ADD. bytes is added to accumulator
+			opbytes = 1;
+			carry_add_to_reg(cpu, &cpu->A, cpu->A);
+			break;
+		case 0x88:		// ADC. 
+			opbytes = 1;
+			carry_add_to_reg(cpu, &cpu->A, (cpu->B + cpu->carry));
+			break;
+		case 0x89:		// ADC. 
+			opbytes = 1;
+			carry_add_to_reg(cpu, &cpu->A, (cpu->C + cpu->carry));
+			break;
+		case 0x8A:		// ADC. 
+			opbytes = 1;
+			carry_add_to_reg(cpu, &cpu->A, (cpu->D + cpu->carry));
+			break;
+		case 0x8B:		// ADC. 
+			opbytes = 1;
+			carry_add_to_reg(cpu, &cpu->A, (cpu->E + cpu->carry));
+			break;
+		case 0x8C:		// ADC. 
+			opbytes = 1;
+			carry_add_to_reg(cpu, &cpu->A, (cpu->H + cpu->carry));
+			break;
+		case 0x8D:		// ADC. 
+			opbytes = 1;
+			carry_add_to_reg(cpu, &cpu->A, (cpu->L + cpu->carry));
+			break;
+		case 0x8E:		// ADC. 
+			opbytes = 1;
+			carry_add_to_reg(cpu, &cpu->A, (read_memory_byte(cpu, make_word(cpu->H, cpu->L)) + cpu->carry));
+			break;
+		case 0x8F:		// ADC. 
+			opbytes = 1;
+			carry_add_to_reg(cpu, &cpu->A, (cpu->A + cpu->carry));
+			break;
+		case 0x90:		// SUB. Subtract register from accumulatort
+			opbytes =1;
+			carry_sub_from_reg(cpu, &cpu->A, cpu->B);
+			break;
+		case 0x91:		// SUB. Subtract register from accumulatort
+			opbytes =1;
+			carry_sub_from_reg(cpu, &cpu->A, cpu->C);
+			break;
+		case 0x92:		// SUB. Subtract register from accumulatort
+			opbytes =1;
+			carry_sub_from_reg(cpu, &cpu->A, cpu->D);
+			break;
+		case 0x93:		// SUB. Subtract register from accumulatort
+			opbytes =1;
+			carry_sub_from_reg(cpu, &cpu->A, cpu->E);
+			break;
+		case 0x94:		// SUB. Subtract register from accumulatort
+			opbytes =1;
+			carry_sub_from_reg(cpu, &cpu->A, cpu->H);
+			break;
+		case 0x95:		// SUB. Subtract register from accumulatort
+			opbytes =1;
+			carry_sub_from_reg(cpu, &cpu->A, cpu->L);
+			break;
+		case 0x96:		// SUB. Subtract register from accumulatort
+			opbytes =1;
+			carry_sub_from_reg(cpu, &cpu->A, read_memory_byte(cpu, make_word(cpu->H, cpu->L)));
+			break;
+		case 0x97:		// SUB. Subtract register from accumulatort
+			opbytes =1;
+			carry_sub_from_reg(cpu, &cpu->A, cpu->A);
+			break;
+		case 0x98:		//SBB. sub reg from accu w/ borrow
+			opbytes =1;
+			carry_sub_from_reg(cpu, &cpu->A, (cpu->B + cpu->carry));
+			break;
+		case 0x99:		//SBB. sub reg from accu w/ borrow
+			opbytes =1;
+			carry_sub_from_reg(cpu, &cpu->A, (cpu->C + cpu->carry));
+			break;
+		case 0x9A:		//SBB. sub reg from accu w/ borrow
+			opbytes =1;
+			carry_sub_from_reg(cpu, &cpu->A, (cpu->D + cpu->carry));
+			break;
+		case 0x9B:		//SBB. sub reg from accu w/ borrow
+			opbytes =1;
+			carry_sub_from_reg(cpu, &cpu->A, (cpu->E + cpu->carry));
+			break;
+		case 0x9C:		//SBB. sub reg from accu w/ borrow
+			opbytes =1;
+			carry_sub_from_reg(cpu, &cpu->A, (cpu->H + cpu->carry));
+			break;
+		case 0x9D:		//SBB. sub reg from accu w/ borrow
+			opbytes =1;
+			carry_sub_from_reg(cpu, &cpu->A, (cpu->L + cpu->carry));
+			break;
+		case 0x9E:		//SBB. sub reg from accu w/ borrow
+			opbytes =1;
+			carry_sub_from_reg(cpu, &cpu->A, (read_memory_byte(cpu, make_word(cpu->H, cpu->L)) + cpu->carry));
+			break;
+		case 0x9F:		//SBB. sub reg from accu w/ borrow
+			opbytes =1;
+			carry_sub_from_reg(cpu, &cpu->A, (cpu->A + cpu->carry));
+			break;
+		case 0xA0:		// ANA. reg is anded with the accumulator
+			opbytes = 1;
+			carry_and_to_reg(cpu, &cpu->A, cpu->B);
+			break;
+		case 0xA1:		// ANA. reg is anded with the accumulator
+			opbytes = 1;
+			carry_and_to_reg(cpu, &cpu->A, cpu->C);
+			break;
+		case 0xA2:		// ANA. reg is anded with the accumulator
+			opbytes = 1;
+			carry_and_to_reg(cpu, &cpu->A, cpu->D);
+			break;
+		case 0xA3:		// ANA. reg is anded with the accumulator
+			opbytes = 1;
+			carry_and_to_reg(cpu, &cpu->A, cpu->E);
+			break;
+		case 0xA4:		// ANA. reg is anded with the accumulator
+			opbytes = 1;
+			carry_and_to_reg(cpu, &cpu->A, cpu->H);
+			break;
+		case 0xA5:		// ANA. reg is anded with the accumulator
+			opbytes = 1;
+			carry_and_to_reg(cpu, &cpu->A, cpu->L);
+			break;
+		case 0xA6:		// ANA. reg is anded with the accumulator
+			opbytes = 1;
+			carry_and_to_reg(cpu, &cpu->A, read_memory_byte(cpu, make_word(cpu->H, cpu->L)));
+			break;
+		case 0xA7:		// ANA. reg is anded with the accumulator
+			opbytes = 1;
+			carry_and_to_reg(cpu, &cpu->A, cpu->A);
+			break;
+		case 0xA8:		// XRA. reg is xored w/ accu
+			opbytes =1;
+			carry_xor_to_reg(cpu, &cpu->A, cpu->B);
+			break;
+		case 0xA9:		// XRA. reg is xored w/ accu
+			opbytes =1;
+			carry_xor_to_reg(cpu, &cpu->A, cpu->C);
+			break;
+		case 0xAA:		// XRA. reg is xored w/ accu
+			opbytes =1;
+			carry_xor_to_reg(cpu, &cpu->A, cpu->D);
+			break;
+		case 0xAB:		// XRA. reg is xored w/ accu
+			opbytes =1;
+			carry_xor_to_reg(cpu, &cpu->A, cpu->E);
+			break;
+		case 0xAC:		// XRA. reg is xored w/ accu
+			opbytes =1;
+			carry_xor_to_reg(cpu, &cpu->A, cpu->H);
+			break;
+		case 0xAD:		// XRA. reg is xored w/ accu
+			opbytes =1;
+			carry_xor_to_reg(cpu, &cpu->A, cpu->L);
+			break;
+		case 0xAE:		// XRA. reg is xored w/ accu
+			opbytes =1;
+			carry_xor_to_reg(cpu, &cpu->A, read_memory_byte(cpu, make_word(cpu->H, cpu->L)));
+			break;
+		case 0xAF:		// XRA. reg is xored w/ accu
+			opbytes =1;
+			carry_xor_to_reg(cpu, &cpu->A, cpu->A);
+			break;
+		case 0xB0:		// ORA.reg is ored with accumulator
+			opbytes =1;
+			carry_or_to_reg(cpu, &cpu->A, cpu->B);
+			break;
+		case 0xB1:		// ORA.reg is ored with accumulator
+			opbytes =1;
+			carry_or_to_reg(cpu, &cpu->A, cpu->C);
+			break;
+		case 0xB2:		// ORA.reg is ored with accumulator
+			opbytes =1;
+			carry_or_to_reg(cpu, &cpu->A, cpu->D);
+			break;
+		case 0xB3:		// ORA.reg is ored with accumulator
+			opbytes =1;
+			carry_or_to_reg(cpu, &cpu->A, cpu->E);
+			break;
+		case 0xB4:		// ORA.reg is ored with accumulator
+			opbytes =1;
+			carry_or_to_reg(cpu, &cpu->A, cpu->H);
+			break;
+		case 0xB5:		// ORA.reg is ored with accumulator
+			opbytes =1;
+			carry_or_to_reg(cpu, &cpu->A, cpu->L);
+			break;
+		case 0xB6:		// ORA.reg is ored with accumulator
+			opbytes =1;
+			carry_or_to_reg(cpu, &cpu->A, read_memory_byte(cpu, make_word(cpu->H, cpu->L)));
+			break;
+		case 0xB7:		// ORA.reg is ored with accumulator
+			opbytes =1;
+			carry_or_to_reg(cpu, &cpu->A, cpu->A);
+			break;
+		case 0xb8:		// CMP. reg is compared to the accumulator
+			opbytes = 1;
+			carry_cmp_to_reg(cpu, &cpu->A, cpu->B);
+			break;
+		case 0xb9:		// CMP. reg is compared to the accumulator
+			opbytes = 1;
+			carry_cmp_to_reg(cpu, &cpu->A, cpu->C);
+			break;
+		case 0xba:		// CMP. reg is compared to the accumulator
+			opbytes = 1;
+			carry_cmp_to_reg(cpu, &cpu->A, cpu->D);
+			break;
+		case 0xbb:		// CMP. reg is compared to the accumulator
+			opbytes = 1;
+			carry_cmp_to_reg(cpu, &cpu->A, cpu->E);
+			break;
+		case 0xbc:		// CMP. reg is compared to the accumulator
+			opbytes = 1;
+			carry_cmp_to_reg(cpu, &cpu->A, cpu->H);
+			break;
+		case 0xbd:		// CMP. reg is compared to the accumulator
+			opbytes = 1;
+			carry_cmp_to_reg(cpu, &cpu->A, cpu->L);
+			break;
+		case 0xbe:		// CMP. reg is compared to the accumulator
+			opbytes = 1;
+			carry_cmp_to_reg(cpu, &cpu->A, read_memory_byte(cpu, make_word(cpu->H, cpu->L)));
+			break;
+		case 0xbf:		// CMP. reg is compared to the accumulator
+			opbytes = 1;
+			carry_cmp_to_reg(cpu, &cpu->A, cpu->A);
+			break;
+		case 0xC0:		// RNZ. return if not zero
+			opbytes =1;
+			if(cpu->zero == 0)
+			{
+				cpu->program_counter = cpu->stack[cpu->stack_pointer];
+				cpu->stack_pointer -=1;
+			}
+			break;
+		case 0xC1:		// POP
+			opbytes =1;
+			
+			break;
+		case 0xC8:		// RZ.
+			opbytes =1;
+			if(cpu->zero == 1)
+			{
+				cpu->program_counter = cpu->stack[cpu->stack_pointer];
+				cpu->stack_pointer -=1;
+			}
+			break;
+		case 0xC9:		// RET. return
+			opbytes =1;
+			cpu->program_counter = cpu->stack[cpu->stack_pointer];
+			cpu->stack_pointer -=1;
+			break;
+		case 0xD0:		// RNC. return no carry
+			opbytes =1;
+			if(cpu->carry == 0)
+			{
+				cpu->program_counter = cpu->stack[cpu->stack_pointer];
+				cpu->stack_pointer -=1;
+			}
+			break;
+		case 0xD8:		// RC
+			opbytes =1;
+			if(cpu->carry == 1)
+			{
+				cpu->program_counter = cpu->stack[cpu->stack_pointer];
+				cpu->stack_pointer -=1;
+			}
+			break;
+		case 0xD9:		// RET. return
+			opbytes =1;
+			cpu->program_counter = cpu->stack[cpu->stack_pointer];
+			cpu->stack_pointer -=1;
+			break;
+		case 0xE0:		// RPO.
+			opbytes =1;
+			if(cpu->parity == 0)
+			{
+				cpu->program_counter = cpu->stack[cpu->stack_pointer];
+				cpu->stack_pointer -=1;
+			}
+			break;
+		case 0xE8:		// RPE.
+			opbytes =1;
+			if(cpu->parity == 1)
+			{
+				cpu->program_counter = cpu->stack[cpu->stack_pointer];
+				cpu->stack_pointer -=1;
+			}
+			break;
+		case 0xF0:		// RP. 
+			opbytes =1;
+			if(cpu->sign == 0)
+			{
+				cpu->program_counter = cpu->stack[cpu->stack_pointer];
+				cpu->stack_pointer -=1;
+			}
+			break;
+		case 0xF8:		// RM.
+			opbytes =1;
+			if(cpu->sign == 1)
+			{
+				cpu->program_counter = cpu->stack[cpu->stack_pointer];
+				cpu->stack_pointer -=1;
+			}
+			break;
+
 		default:
 			opcode_error(cpu->instruction);
 			break;

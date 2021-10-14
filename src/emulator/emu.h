@@ -24,6 +24,7 @@ typedef struct
 
     unsigned char instruction;
     char* memory;
+	uint16_t stack[10];
 
 	uint16_t adress_bus;
 	uint16_t data_bus;
