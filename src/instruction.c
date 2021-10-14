@@ -14,7 +14,7 @@ void process_ins()
 {
 	unsigned int ins[3];
 	
-	scanf("%x%x", &ins[0], &ins[1]);
+	scanf("%x%x%x", &ins[0], &ins[1], &ins[2]);
 
 	char ins_c[3];
 

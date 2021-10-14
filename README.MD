@@ -1,6 +1,6 @@
 # 8080-Emulator
 
-This is my program to emulate a Intel 8080 CPU. The Intel 8080 was created in the 1970s and sported 8-bit data sizes and up to 64 Kilobytes of memory. My emulator has a shell that you can use to provide the instruction that you want the cpu to run and then shows you the update state of the cpu. It is written in the C programming language and contains over 2000 lines of code.
+This is my program to emulate a Intel 8080 CPU. The Intel 8080 was created in the 1970s and sported 8-bit data sizes and up to 64 Kilobytes of memory. My emulator has a shell that you can use to provide the instruction that you want the cpu to run and then shows you the update state of the cpu. It is written in the C programming language and contains over 3000 lines of code.
 
 ## Features:
 - Disassembler: You can generate a disassembled version of a compiled binary
@@ -19,6 +19,7 @@ This is my program to emulate a Intel 8080 CPU. The Intel 8080 was created in th
 - you can use the `inst` command in my program to open a shell the allows you to run a command 
    - type in the hexadecimal operation code for the instruction that you want run on the cpu. A list of all 255 can be found [here](https://pastraiser.com/cpu/i8080/i8080_opcodes.html).
    - the format is `op d1 d2` where `op` means the operation code and `d1 d2` are the first and second immideate values (if there are none then just put 00 00)
+   - to exit the emulator use the ctrl-c key combination.
 
 ## Examples:
 Because I know the the instructions for compiling and running the program are rather complex I will provide some examples of the emulator in action right here for anyone who is interested. You will see the actual output from the program under each example and will be able to observe the changes in state of the CPU for your self.
